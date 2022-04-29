@@ -1,5 +1,6 @@
 from pandas import DataFrame
 from typing import List, Union
+import math
 
 
 class KNN:
@@ -27,12 +28,17 @@ class KNN:
             if i >= len(distances):
                 break
             vote = distances[i][1]
-            if vote in votes:
-                votes[vote] += 1
+            distance = distances[i][0]
+            if distance == 0:
+                vote_value = math.inf
             else:
-                votes[vote] = 1
+                vote_value = 1 / distance
+            if vote in votes:
+                votes[vote] += vote_value
+            else:
+                votes[vote] = vote_value
         sorted_votes = sorted(
-            votes.items(), key=lambda x: (x[1], x[0]), reverse=True)
+            votes.items(), key=lambda x: x[1], reverse=True)
         return sorted_votes[0][0]
 
     def predict_on_df(self, df: DataFrame):

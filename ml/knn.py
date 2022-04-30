@@ -4,8 +4,12 @@ import math
 
 
 class KNN:
-    def __init__(self, k):
+    k: int
+    verbose: bool
+
+    def __init__(self, k, verbose=False):
         self.k = k
+        self.verbose = verbose
         self.data = []
 
     def fit(self, x: List[float], y: Union[str, int]):
@@ -41,7 +45,7 @@ class KNN:
             votes.items(), key=lambda x: x[1], reverse=True)
         return sorted_votes[0][0]
 
-    def predict_on_df(self, df: DataFrame):
+    def predict_on_df(self, df: DataFrame) -> List[Union[str, int]]:
         predictions = []
         for i in range(len(df)):
             predictions.append(self.predict(df.iloc[i, :-1]))

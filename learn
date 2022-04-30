@@ -9,7 +9,7 @@ Spring 2022
 
 import pandas as pd
 import argparse
-from ml import KNN, metrics, LabelMetrics
+from ml import KNN, NaiveBayes, metrics, LabelMetrics
 from typing import Dict, List, Union
 
 
@@ -21,7 +21,7 @@ def print_prediction_comparisons(test_df: pd.DataFrame, predictions: List[Union[
 def print_metrics(metrics_dict: Dict[str, LabelMetrics]):
     for label in sorted(metrics_dict.keys()):
         print(
-            f"label={label} Precision={metrics_dict[label]['correct']}/{metrics_dict[label]['predicted']} Recall={metrics_dict[label]['correct']}/{metrics_dict[label]['true']}")
+            f"Label={label} Precision={metrics_dict[label]['correct']}/{metrics_dict[label]['predicted']} Recall={metrics_dict[label]['correct']}/{metrics_dict[label]['true']}")
 
 
 def main():
@@ -57,11 +57,18 @@ def main():
     test_df = pd.read_csv(args.test, header=None)
 
     if k > 0:
-        knn = KNN(k)
+        knn = KNN(k, verbose=args.verbose)
         knn.train(train_df)
         predictions = knn.predict_on_df(test_df)
+    else:
+        train_df = train_df.astype(str)
+        test_df = test_df.astype(str)
+        naive_bayes = NaiveBayes(c, verbose=args.verbose)
+        naive_bayes.train(train_df)
+        predictions = naive_bayes.predict_on_df(test_df)
 
-    print_prediction_comparisons(test_df, predictions)
+    if args.verbose:
+        print_prediction_comparisons(test_df, predictions)
 
     metrics_dict = metrics(test_df, predictions)
     print_metrics(metrics_dict)

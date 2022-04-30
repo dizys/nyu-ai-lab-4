@@ -12,5 +12,5 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.python"
     },
-    "cSpell.words": ["astype", "iloc", "probs"]
+    "cSpell.words": ["astype", "CIMS", "iloc", "probs"]
 }
